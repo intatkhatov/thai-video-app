@@ -2,12 +2,20 @@ import os
 import shutil
 from config import APP_TEMP_PATH, DOWNLOADS_PATH
 
+import os
+import shutil
+from config import APP_TEMP_PATH as THAI_TEMP_PATH
+from config_english import APP_TEMP_PATH as ENGLISH_TEMP_PATH
+
 def cleanup_temp_files():
-    """Удаляет временные файлы и папки"""
+    """Удаляет временные файлы и папки для обоих языков"""
     temp_folders = [
-        APP_TEMP_PATH,
-        os.path.join(APP_TEMP_PATH, 'audio_files'),
-        os.path.join(APP_TEMP_PATH, 'frame_cache')
+        THAI_TEMP_PATH,
+        os.path.join(THAI_TEMP_PATH, 'audio_files'),
+        os.path.join(THAI_TEMP_PATH, 'frame_cache'),
+        ENGLISH_TEMP_PATH,
+        os.path.join(ENGLISH_TEMP_PATH, 'audio_files'),
+        os.path.join(ENGLISH_TEMP_PATH, 'frame_cache')
     ]
     
     print("\n🧹 Очищаем временные файлы...")
@@ -24,13 +32,16 @@ def cleanup_temp_files():
             except Exception as e:
                 print(f"⚠️ Не удалось удалить {folder}: {e}")
     
-    # Проверяем, остались ли отдельные временные файлы в Downloads
+    # Проверяем, остались ли отдельные временные файлы
     temp_files = [
-        os.path.join(APP_TEMP_PATH, 'audio_list.txt'),
-        os.path.join(APP_TEMP_PATH, 'concat_list.txt'),
-        os.path.join(APP_TEMP_PATH, 'combined_audio.mp3'),
-        os.path.join(APP_TEMP_PATH, 'audio_concat_list.txt'),
-        os.path.join(APP_TEMP_PATH, 'learning_concat_list.txt')
+        os.path.join(THAI_TEMP_PATH, 'audio_list.txt'),
+        os.path.join(THAI_TEMP_PATH, 'concat_list.txt'),
+        os.path.join(THAI_TEMP_PATH, 'combined_audio.mp3'),
+        os.path.join(THAI_TEMP_PATH, 'audio_concat_list.txt'),
+        os.path.join(THAI_TEMP_PATH, 'learning_concat_list.txt'),
+        os.path.join(ENGLISH_TEMP_PATH, 'english_concat_list.txt'),
+        os.path.join(ENGLISH_TEMP_PATH, 'english_audio_concat_list.txt'),
+        os.path.join(ENGLISH_TEMP_PATH, 'english_learning_concat_list.txt')
     ]
     
     for file in temp_files:

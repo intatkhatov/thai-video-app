@@ -1,0 +1,22 @@
+[
+  {
+    "number": 1,
+    "english": "hello",
+    "russian": "привет"
+  },
+  {
+    "number": 2,
+    "english": "goodbye",
+    "russian": "до свидания"
+  },
+  {
+    "number": 3,
+    "english": "thank you",
+    "russian": "спасибо"
+  },
+  {
+    "number": 4,
+    "english": "please",
+    "russian": "пожалуйста"
+  }
+]

@@ -1,26 +1,14 @@
 [
   {
     "number": 1,
-    "thai": "ตาม",
-    "transliteration": "tām",
-    "russian": "согласно"
+    "thai": "น้ำเงินเข้ม",
+    "transliteration": "náam-ngern khêm",
+    "russian": "тёмно-синий"
   },
   {
     "number": 2,
-    "thai": "ใจ",
-    "transliteration": "jai",
-    "russian": "воля"
-  },
-  {
-    "number": 3,
-    "thai": "คุณ",
-    "transliteration": "khun",
-    "russian": "вы"
-  },
-  {
-    "number": 4,
-    "thai": "แล้วกัน",
-    "transliteration": "lǽo kan",
-    "russian": "ладно"
+    "thai": "น้ำเงินอ่อน",
+    "transliteration": "náam-ngern òrn",
+    "russian": "светло-синий"
   }
 ]
