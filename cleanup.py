@@ -1,21 +1,21 @@
 import os
 import shutil
-from config import APP_TEMP_PATH, DOWNLOADS_PATH
-
-import os
-import shutil
 from config import APP_TEMP_PATH as THAI_TEMP_PATH
 from config_english import APP_TEMP_PATH as ENGLISH_TEMP_PATH
+from config_english_horizontal import APP_TEMP_PATH as ENGLISH_HORIZONTAL_TEMP_PATH
 
 def cleanup_temp_files():
-    """Удаляет временные файлы и папки для обоих языков"""
+    """Удаляет временные файлы и папки для всех языков и ориентаций"""
     temp_folders = [
         THAI_TEMP_PATH,
         os.path.join(THAI_TEMP_PATH, 'audio_files'),
         os.path.join(THAI_TEMP_PATH, 'frame_cache'),
         ENGLISH_TEMP_PATH,
         os.path.join(ENGLISH_TEMP_PATH, 'audio_files'),
-        os.path.join(ENGLISH_TEMP_PATH, 'frame_cache')
+        os.path.join(ENGLISH_TEMP_PATH, 'frame_cache'),
+        ENGLISH_HORIZONTAL_TEMP_PATH,
+        os.path.join(ENGLISH_HORIZONTAL_TEMP_PATH, 'audio_files'),
+        os.path.join(ENGLISH_HORIZONTAL_TEMP_PATH, 'frame_cache')
     ]
     
     print("\n🧹 Очищаем временные файлы...")
@@ -41,7 +41,9 @@ def cleanup_temp_files():
         os.path.join(THAI_TEMP_PATH, 'learning_concat_list.txt'),
         os.path.join(ENGLISH_TEMP_PATH, 'english_concat_list.txt'),
         os.path.join(ENGLISH_TEMP_PATH, 'english_audio_concat_list.txt'),
-        os.path.join(ENGLISH_TEMP_PATH, 'english_learning_concat_list.txt')
+        os.path.join(ENGLISH_TEMP_PATH, 'english_learning_concat_list.txt'),
+        os.path.join(ENGLISH_HORIZONTAL_TEMP_PATH, 'english_horizontal_concat_list.txt'),
+        os.path.join(ENGLISH_HORIZONTAL_TEMP_PATH, 'english_horizontal_learning_concat_list.txt')
     ]
     
     for file in temp_files:
@@ -57,11 +59,11 @@ def cleanup_temp_files():
 
 def keep_temp_files():
     """Сохраняет временные файлы для отладки"""
-    print(f"\n📁 Временные файлы сохранены в папке '{APP_TEMP_PATH}/'")
-    print("💡 Вы можете просмотреть:")
-    print(f"   - {APP_TEMP_PATH}/audio_files/ - аудио файлы произношения")
-    print(f"   - {APP_TEMP_PATH}/frame_cache/ - тестовые изображения")
-    print(f"   - {DOWNLOADS_PATH}/ - итоговые видео")
+    print(f"\n📁 Временные файлы сохранены:")
+    print(f"   - {THAI_TEMP_PATH}/ - тайский язык")
+    print(f"   - {ENGLISH_TEMP_PATH}/ - английский (вертикальное)")
+    print(f"   - {ENGLISH_HORIZONTAL_TEMP_PATH}/ - английский (горизонтальное)")
+    print("💡 Вы можете просмотреть аудио файлы и тестовые изображения")
 
 def ask_for_cleanup():
     """Спрашивает пользователя о очистке временных файлов"""

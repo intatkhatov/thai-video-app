@@ -35,6 +35,27 @@ def select_language():
 def select_mode(language):
     """Выбор режима работы приложения"""
     print(f"\n📝 Выбран язык: {'Тайский' if language == 'thai' else 'Английский'}")
+    
+    if language == 'english':
+        print("="*50)
+        print("Выберите ориентацию видео:")
+        print("1. 📱 Вертикальное (для смартфонов)")
+        print("2. 🖥️  Горизонтальное (для компьютеров)")
+        print("="*50)
+        
+        while True:
+            orientation_choice = input("Введите номер ориентации (1 или 2): ").strip()
+            if orientation_choice == '1':
+                orientation = 'vertical'
+                break
+            elif orientation_choice == '2':
+                orientation = 'horizontal'
+                break
+            else:
+                print("❌ Пожалуйста, введите 1 или 2")
+    else:
+        orientation = 'vertical'  # Тайский только вертикальный
+    
     print("="*50)
     print("Выберите режим работы:")
     print("1. 📺 Стандартный")
@@ -48,13 +69,13 @@ def select_mode(language):
     while True:
         choice = input("Введите номер режима (1 или 2): ").strip()
         if choice == '1':
-            return 'standard'
+            return 'standard', orientation
         elif choice == '2':
-            return 'learning'
+            return 'learning', orientation
         else:
             print("❌ Пожалуйста, введите 1 или 2")
 
-def get_downloads_path(language, mode):
+def get_downloads_path(language, mode, orientation):
     """Возвращает путь для сохранения видео в Downloads"""
     if language == 'thai':
         if mode == 'standard':
@@ -62,10 +83,16 @@ def get_downloads_path(language, mode):
         else:
             return os.path.join(DOWNLOADS_PATH, "thai_learning_video.mp4")
     else:  # english
-        if mode == 'standard':
-            return os.path.join(DOWNLOADS_PATH, "english_standard_video.mp4")
-        else:
-            return os.path.join(DOWNLOADS_PATH, "english_learning_video.mp4")
+        if orientation == 'vertical':
+            if mode == 'standard':
+                return os.path.join(DOWNLOADS_PATH, "english_standard_video.mp4")
+            else:
+                return os.path.join(DOWNLOADS_PATH, "english_learning_video.mp4")
+        else:  # horizontal
+            if mode == 'standard':
+                return os.path.join(DOWNLOADS_PATH, "english_standard_horizontal.mp4")
+            else:
+                return os.path.join(DOWNLOADS_PATH, "english_learning_horizontal.mp4")
 
 def main():
     # Настраиваем директории
@@ -83,10 +110,10 @@ def main():
     print(f"📝 Загружено слов: {len(data)}")
     
     # Выбираем режим
-    mode = select_mode(language)
+    mode, orientation = select_mode(language)
     
     # Получаем путь для сохранения в Downloads
-    downloads_output = get_downloads_path(language, mode)
+    downloads_output = get_downloads_path(language, mode, orientation)
     
     # Запускаем выбранный режим и язык
     if language == 'thai':
@@ -97,12 +124,22 @@ def main():
             print("\n🚀 Запускаем режим ЗАУЧИВАНИЯ для тайского...")
             generate_learning_thai(data, downloads_output)
     else:  # english
-        if mode == 'standard':
-            print("\n🚀 Запускаем СТАНДАРТНЫЙ режим для английского...")
-            create_english_video_from_data(data, downloads_output)
-        else:
-            print("\n🚀 Запускаем режим ЗАУЧИВАНИЯ для английского...")
-            generate_english_learning_video(data, downloads_output)
+        if orientation == 'vertical':
+            if mode == 'standard':
+                print("\n🚀 Запускаем СТАНДАРТНЫЙ режим для английского (вертикальное)...")
+                create_english_video_from_data(data, downloads_output)
+            else:
+                print("\n🚀 Запускаем режим ЗАУЧИВАНИЯ для английского (вертикальное)...")
+                generate_english_learning_video(data, downloads_output)
+        else:  # horizontal
+            if mode == 'standard':
+                print("\n🚀 Запускаем СТАНДАРТНЫЙ режим для английского (горизонтальное)...")
+                from video_generator_english import create_english_horizontal_video_from_data
+                create_english_horizontal_video_from_data(data, downloads_output)
+            else:
+                print("\n🚀 Запускаем режим ЗАУЧИВАНИЯ для английского (горизонтальное)...")
+                from learning_mode_english import generate_english_horizontal_learning_video
+                generate_english_horizontal_learning_video(data, downloads_output)
     
     print(f"✅ Видео сохранено в: {downloads_output}")
     

@@ -109,6 +109,112 @@ class EnglishLearningVideoGenerator:
         
         return output_path
 
+class EnglishLearningHorizontalVideoGenerator:
+    def __init__(self):
+        from config_english_horizontal import TEXT_POSITION
+        self.width = TEXT_POSITION['screen']['width']
+        self.height = TEXT_POSITION['screen']['height']
+        self.fps = 24
+        
+    def create_learning_video(self, word_data, audio_duration, output_path):
+        """Создает горизонтальное видео для одного английского слова с точной длительностью под аудио"""
+        from text_renderer_english_horizontal import create_english_horizontal_text_block
+        
+        print(f"Создаем горизонтальное видео для слова: {word_data['english']} (длительность: {audio_duration:.2f}с)")
+        
+        # Создаем VideoWriter
+        fourcc = cv2.VideoWriter_fourcc(*'mp4v')
+        video_writer = cv2.VideoWriter(output_path, fourcc, self.fps, (self.width, self.height))
+        
+        # Создаем изображение для слова
+        pil_image = create_english_horizontal_text_block(word_data)
+        opencv_image = cv2.cvtColor(np.array(pil_image), cv2.COLOR_RGB2BGR)
+        
+        # Добавляем кадры на точную длительность аудио
+        frames_count = int(audio_duration * self.fps)
+        for _ in range(frames_count):
+            video_writer.write(opencv_image)
+        
+        video_writer.release()
+        
+        return output_path
+
+def generate_english_horizontal_learning_video(words_data, output_path):
+    """Основная функция для создания горизонтального видео в режиме заучивания английского"""
+    print("🎓 РЕЖИМ ЗАУЧИВАНИЯ АНГЛИЙСКОГО (ГОРИЗОНТАЛЬНОЕ)")
+    print("="*50)
+    
+    # Создаем папки
+    os.makedirs(os.path.join(APP_TEMP_PATH, 'audio_files'), exist_ok=True)
+    
+    # Генерируем аудио для каждого слова
+    audio_generator = EnglishLearningAudioGenerator()
+    video_generator = EnglishLearningHorizontalVideoGenerator()
+    
+    word_videos = []
+    audio_durations = []
+    
+    print("\n🔊 Генерируем аудио файлы...")
+    for i, word in enumerate(words_data):
+        audio_file, audio_duration = audio_generator.generate_learning_audio(
+            word['english'], f"english_horizontal_learning_word_{i+1}.mp3"
+        )
+        if audio_file and audio_duration > 0:
+            audio_durations.append(audio_duration)
+        else:
+            audio_durations.append(2.0)
+    
+    print("\n🎬 Создаем горизонтальное видео для каждого слова...")
+    for i, (word, duration) in enumerate(zip(words_data, audio_durations)):
+        word_video_path = os.path.join(APP_TEMP_PATH, f"english_horizontal_learning_word_{i+1}.mp4")
+        video_path = video_generator.create_learning_video(word, duration, word_video_path)
+        
+        # Добавляем аудио к видео
+        final_word_video = video_path.replace('.mp4', '_with_audio.mp4')
+        audio_file = os.path.join(APP_TEMP_PATH, 'audio_files', f"english_horizontal_learning_word_{i+1}.mp3")
+        
+        if os.path.exists(audio_file):
+            subprocess.run([
+                'ffmpeg', '-i', video_path, '-i', audio_file,
+                '-c:v', 'copy', '-c:a', 'aac', '-shortest',
+                final_word_video, '-y'
+            ], check=True)
+            word_videos.append(final_word_video)
+        else:
+            print(f"⚠️ Аудио файл не найден: {audio_file}")
+    
+    # Объединяем все видео в одно
+    print("\n🔗 Объединяем горизонтальные видео...")
+    concat_list_file = os.path.join(APP_TEMP_PATH, "english_horizontal_learning_concat_list.txt")
+    
+    with open(concat_list_file, 'w') as f:
+        for video_file in word_videos:
+            if video_file and os.path.exists(video_file):
+                abs_path = os.path.abspath(video_file)
+                f.write(f"file '{abs_path}'\n")
+    
+    # Проверяем, есть ли файлы для объединения
+    if os.path.exists(concat_list_file):
+        with open(concat_list_file, 'r') as f:
+            content = f.read().strip()
+            if not content:
+                print("❌ Нет видео файлов для объединения")
+                return None
+        
+        subprocess.run([
+            'ffmpeg', '-f', 'concat', '-safe', '0', '-i', concat_list_file,
+            '-c', 'copy', output_path, '-y'
+        ], check=True)
+        
+        print(f"✅ Горизонтальное видео в режиме заучивания английского создано: {output_path}")
+        
+        total_duration = sum(audio_durations)
+        print(f"📊 Общая длительность: {total_duration:.2f} секунд")
+        return output_path
+    else:
+        print("❌ Не удалось создать список для объединения видео")
+        return None
+
 def generate_english_learning_video(words_data, output_path):
     """Основная функция для создания видео в режиме заучивания английского"""
     print("🎓 РЕЖИМ ЗАУЧИВАНИЯ АНГЛИЙСКОГО")
