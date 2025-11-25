@@ -1,22 +1,10 @@
 [
-  {
-    "number": 1,
-    "english": "hello",
-    "russian": "привет"
-  },
-  {
-    "number": 2,
-    "english": "goodbye",
-    "russian": "до свидания"
-  },
-  {
-    "number": 3,
-    "english": "thank you",
-    "russian": "спасибо"
-  },
-  {
-    "number": 4,
-    "english": "please",
-    "russian": "пожалуйста"
-  }
+  { "number": 1, "english": "most bookstores and online booksellers", "russian": "большинство книжных магазинов и онлайн-продавцов" },
+  { "number": 2, "english": "may be reproduced or utilized", "russian": "может быть воспроизведено или использовано" },
+  { "number": 3, "english": "does not constitute or imply", "russian": "не означает и не подразумевает" },
+  { "number": 4, "english": "for educational and instructive purposes", "russian": "в образовательных и учебных целях" },
+  { "number": 5, "english": "may be real or fictitious", "russian": "могут быть реальными или вымышленными" },
+  { "number": 6, "english": "used for instructional purposes only", "russian": "используются только в учебных целях" },
+  { "number": 7, "english": "includes bibliographical references and index", "russian": "включает библиографические ссылки и указатель" },
+  { "number": 8, "english": "Printed in the United States of America", "russian": "напечатано в США" }
 ]
